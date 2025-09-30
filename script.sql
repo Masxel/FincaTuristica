@@ -10,10 +10,12 @@ CREATE TABLE `db_fincaturistica`.`reserva` (
     `idcliente` int NOT NULL,
     `idhabitacion` int NOT NULL,
     `estadoreserva` int NOT NULL,
+    `idevento` int NULL,
     PRIMARY KEY(`id`),
     CONSTRAINT `fk_reserva__cliente` FOREIGN KEY (`idcliente`) REFERENCES `cliente`(`id`),
     CONSTRAINT `fk_reserva__habitacion` FOREIGN KEY (`idhabitacion`) REFERENCES `habitacion`(`id`),
-    CONSTRAINT `fk_reserva__estado` FOREIGN KEY (`estadoreserva`) REFERENCES `estadoreserva`(`id`)
+    CONSTRAINT `fk_reserva__estado` FOREIGN KEY (`estadoreserva`) REFERENCES `estadoreserva`(`id`),
+    CONSTRAINT `fk_reserva__evento` FOREIGN KEY (`idevento`) REFERENCES `eventos`(`id`)
 );
 
 
@@ -21,6 +23,13 @@ CREATE TABLE `db_fincaturistica`.`reserva` (
 CREATE TABLE `db_fincaturistica`.`estadoreserva` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `descripcion` VARCHAR(45) NOT NULL,
+    PRIMARY KEY(`id`)
+);
+
+-- Tabla para registrar los tipos de eventos disponibles como decoración aniversario, cumpleaños, amor, dia de sol, etc.
+CREATE TABLE `db_fincaturistica`.`eventos` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `descripcion` VARCHAR(200) NOT NULL,        
     PRIMARY KEY(`id`)
 );
 
@@ -129,12 +138,13 @@ CREATE TABLE `db_fincaturistica`.`menu` (
     PRIMARY KEY(`id`)
 );
 
--- Tienda donde los clientes pueden comprar recuerdos de su estadia en la finca turistica.
+-- Tienda donde los clientes pueden comprar recuerdos de su estadia en la finca turistica, cremas, bloqueadores, insecticidas, etc.
 CREATE TABLE `db_fincaturistica`.`tienda_local` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `nombre` VARCHAR(100) NOT NULL,
     `descripcion` VARCHAR(200) NOT NULL,
     `precio` int NOT NULL,
-    `cantidad` int NOT NULL,
+    `cantidaddisponible` int NOT NULL,
     PRIMARY KEY(`id`)
 );
+
