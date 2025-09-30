@@ -104,4 +104,15 @@ CREATE TABLE `db_fincaturistica`.`zonas_entretenimiento` (
     `descripcion` VARCHAR(200) NOT NULL,
     PRIMARY KEY(`id`)
 );
-
+--reseñas y calificaciones que los clientes
+CREATE TABLE reseñas (
+    identificación INT AUTO_INCREMENT NOT NULL,
+    cliente_id INT NOT NULL,
+    idreserva INT NOT NULL,
+    calificación INT NOT NULL CHECK (calificación BETWEEN 1 AND 5),
+    comentario VARCHAR(500),
+    fecha DATE NOT NULL,
+    PRIMARY KEY (identificación),
+    FOREIGN KEY (cliente_id) REFERENCES cliente(identificación),
+    FOREIGN KEY (idreserva) REFERENCES reserva(identificación)
+);
