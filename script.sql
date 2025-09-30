@@ -10,7 +10,10 @@ CREATE TABLE `db_fincaturistica`.`reserva` (
     `idcliente` int NOT NULL,
     `idhabitacion` int NOT NULL,
     `estadoreserva` int NOT NULL,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
+    CONSTRAINT `fk_reserva__cliente` FOREIGN KEY (`idcliente`) REFERENCES `cliente`(`id`),
+    CONSTRAINT `fk_reserva__habitacion` FOREIGN KEY (`idhabitacion`) REFERENCES `habitacion`(`id`),
+    CONSTRAINT `fk_reserva__estado` FOREIGN KEY (`estadoreserva`) REFERENCES `estadoreserva`(`id`)
 );
 
 
@@ -58,7 +61,7 @@ CREATE TABLE `db_fincaturistica`.`cargo` (
     PRIMARY KEY(`id`)
 );
 
--- Tabla para registrar los insumos que se utilizan en la finca turistica, como alimentos, bebidas, productos de limpieza, etc.
+-- Tabla para registrar los insumos que se utilizan en la finca turistica, como productos de limpieza, almohadas, toallas, etc.
 CREATE TABLE `db_fincaturistica`.`insumos` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `nombre` VARCHAR(45) NOT NULL,
@@ -97,11 +100,41 @@ CREATE TABLE `db_fincaturistica`.`metodo_pago` (
     PRIMARY KEY(`id`)
 );
 
---Son zonas como piscinas, jacuzzis, canchas deportivas, salones de eventos, etc.
+--Son zonas como piscinas, jacuzzis, canchas deportivas, salones de eventos, cabalgatas, etc.
 CREATE TABLE `db_fincaturistica`.`zonas_entretenimiento` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `nombre` VARCHAR(45) NOT NULL,
     `descripcion` VARCHAR(200) NOT NULL,
+    `estado` int NOT NULL,
     PRIMARY KEY(`id`)
 );
 
+-- Reseñas y calificaciones que los clientes dejan sobre su experiencia en la finca turistica.
+CREATE TABLE `db_fincaturistica`.`opinion` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `idcliente` int NOT NULL,
+    `calificacion` int NOT NULL,
+    `comentario` VARCHAR(500) NOT NULL,
+    PRIMARY KEY(`id`),
+    CONSTRAINT `fk_opinion__cliente` FOREIGN KEY (`idcliente`) REFERENCES `cliente`(`id`)
+);
+
+-- Menus de la semana para el restaurante de la finca turistica.
+CREATE TABLE `db_fincaturistica`.`menu` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `dia` VARCHAR(15) NOT NULL,
+    `plato_principal` VARCHAR(100) NOT NULL,
+    `acompanamiento` VARCHAR(100) NOT NULL,
+    `postre` VARCHAR(100) NOT NULL,
+    PRIMARY KEY(`id`)
+);
+
+-- Tienda donde los clientes pueden comprar recuerdos de su estadia en la finca turistica.
+CREATE TABLE `db_fincaturistica`.`tienda_local` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `nombre` VARCHAR(100) NOT NULL,
+    `descripcion` VARCHAR(200) NOT NULL,
+    `precio` int NOT NULL,
+    `cantidad` int NOT NULL,
+    PRIMARY KEY(`id`)
+);
