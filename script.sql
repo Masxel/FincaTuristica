@@ -42,7 +42,7 @@ CREATE TABLE `db_fincaturistica`.`habitacion` (
     `estado` int NOT NULL,
     `descripcion` VARCHAR(200) NOT NULL,
     PRIMARY KEY(`id`),
-    CONSTRAINT `fk_habitacion__estado` FOREIGN KEY (`estado`) REFERENCES `estado`(`id`)
+    CONSTRAINT `fk_habitacion__estado` FOREIGN KEY (`estado`) REFERENCES `estadohabitacion`(`id`)
 );
 
 -- Tabla para registrar los estados de las habitaciones, como disponible, ocupada, en mantenimiento, etc.
@@ -60,7 +60,8 @@ CREATE TABLE `db_fincaturistica`.`empleados` (
     `telefono` VARCHAR(15) NOT NULL,
     `email` VARCHAR(45) NOT NULL,
     `cargo` int NOT NULL,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
+    CONSTRAINT `fk_empleados__cargo` FOREIGN KEY (`cargo`) REFERENCES `cargo`(`id`)
 );
 
 -- Tabla para registrar los cargos de los empleados, como administrador, recepcionista, personal de limpieza, etc.
