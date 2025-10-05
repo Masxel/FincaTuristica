@@ -130,7 +130,7 @@ CREATE TABLE `db_fincaturistica`.`opinion` (
 );
 
 -- Menus de la semana para el restaurante de la finca turistica.
-CREATE TABLE `db_fincaturistica`.`menu` (
+CREATE TABLE `db_fincaturistica`.`menualimentacion` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `dia` VARCHAR(15) NOT NULL,
     `plato_principal` VARCHAR(100) NOT NULL,

@@ -1,4 +1,4 @@
-class Menu:
+class MenuAlimentacion:
     id: int = 0
     dia: str = ""
     plato_principal: str = ""

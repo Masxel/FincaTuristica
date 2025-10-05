@@ -5,12 +5,12 @@ class Conexion:
     
     def _cadena_de_conexion(self) -> None:
         self.__str_conexion = """
-        Driver={MySQL ODBC 9.0 Unicode Driver};
+        Driver={MySQL ODBC 9.4 Unicode Driver};
         Server=localhost;
         Database=db_fincaturistica;
         PORT=3306;
-        user=user_python;
-        password=Clas3s1Nt2024_!"""
+        user=root;
+        password=;"""
         
     def conectar_base_datos(self) -> pyodbc.Connection:
         self._cadena_de_conexion()
