@@ -1,6 +1,6 @@
 import pyodbc
 
-class Conexion:
+class ConexionRepository:
     __str_conexion: str = ""
     
     def _cadena_de_conexion(self) -> None:

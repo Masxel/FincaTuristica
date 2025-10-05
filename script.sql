@@ -203,7 +203,7 @@ INSERT INTO `db_fincaturistica`.`tienda_local` (`nombre`, `descripcion`, `precio
 
 
 
--- ==================== PROCEDIMIENTOS ALMACENADOS PARA INSUMOS ===================== --
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA NUEVOS INSUMOS ===================== --
 DELIMITER $$
 
 CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_insumos` (

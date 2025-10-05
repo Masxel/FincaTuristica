@@ -1,4 +1,4 @@
-from Repository.Conexion import Conexion
+from Repository.ConexionRepository import Conexion
 
 class ValidarConexion:
     
