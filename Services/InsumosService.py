@@ -20,7 +20,27 @@ class InsumosService:
             print("Insumo insertado correctamente.")
         else:
             print("Error al insertar insumo.")
+
+
+    def ConsultarInsumos(self):
+        resultados = InsumosRepository().consultar()
+        if resultados: #Dice si el resultado tiene algo
+            for insumo in resultados:
+                print(f"ID: {insumo[0]}, Nombre: {insumo[1]}, Cantidad: {insumo[2]}, Descripción: {insumo[3]}, Precio: {insumo[4]}")
+        else:
+            print("No se encontraron insumos en la base de datos.")
             
+    def EliminarInsumo(self):
+        print("Mostraremos todos los insumos disponibles para que pueda elegir el ID a eliminar: ")
+        self.ConsultarInsumos()
+        print("") #Linea en blanco
+        id_insumo = int(input("Ingrese el ID del insumo a eliminar: "))
+        respuesta = InsumosRepository().eliminar(id_insumo)
+        if respuesta != 0:
+            print("Insumo eliminado correctamente.")
+        else:
+            print("Error al eliminar insumo.")
+
     def MenuInsumos(self):
         while True:
             print("\n--- Menú de Insumos ---")
@@ -37,9 +57,9 @@ class InsumosService:
             elif opcion == '2':
                 pass
             elif opcion == '3':
-                pass
+                self.EliminarInsumo()
             elif opcion == '4':
-                pass
+                self.ConsultarInsumos()
             elif opcion == '5':
                 print("Saliendo del menú de insumos.")
                 break

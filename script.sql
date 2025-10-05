@@ -201,7 +201,7 @@ INSERT INTO `db_fincaturistica`.`tienda_local` (`nombre`, `descripcion`, `precio
 ('Insecticida', 'Repelente contra insectos', 15000, 50),
 ('Recuerdo de la finca', 'Iman de nevera', 5000, 200);
 
--- ==================== PROCEDIMIENTOS ALMACENADOS PARA NUEVOS INSUMOS ===================== --
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA REGISTRAR NUEVOS INSUMOS ===================== --
 DELIMITER $$
 
 CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_insumos` (
@@ -219,3 +219,29 @@ BEGIN
 END $$
 -- ====================================================================================== --
 
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA CONSULTAR TODOS LOS INSUMOS ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_todos_insumos` ()
+BEGIN
+    SELECT `id`, `nombre`, `cantidad`, `descripcion`, `precio`
+    FROM `db_fincaturistica`.`insumos`;
+END $$
+
+-- ====================================================================================== --
+
+-- =================== PROCEDIMIENTOS ALMACENADOS PARA ELIMINAR INSUMO ===================== --
+
+DELIMITER $$
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_insumo` (
+    IN _id INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`insumos`
+    WHERE `id` = _id;
+
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
