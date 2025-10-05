@@ -152,7 +152,7 @@ CREATE TABLE `db_fincaturistica`.`tienda_local` (
 
 -- ==================== VALORES INICIALES PARA TRABAJAR CON LAS TABLAS CREADAS ===================== --
 -- Los valores son basicos para el inicio de un producto, como llenar estados, cargos, metodos de pago, tienda local, etc.
--- Pero que no hacen parte del proyecto final, ya que estos valores pueden ser modificados por el administrador de la finca turistica
+-- Pero que no hacen parte del proyecto final, ya que estos valores pueden ser modificados por el administrador.
 
 INSERT INTO `db_fincaturistica`.`estadoreserva` (`descripcion`) VALUES
 ('Pendiente'),
@@ -200,3 +200,24 @@ INSERT INTO `db_fincaturistica`.`tienda_local` (`nombre`, `descripcion`, `precio
 ('Crema solar', 'Proteccion solar', 20000, 100),
 ('Insecticida', 'Repelente contra insectos', 15000, 50),
 ('Recuerdo de la finca', 'Iman de nevera', 5000, 200);
+
+
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA INSUMOS ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_insumos` (
+    IN _nombre VARCHAR(45),
+    IN _cantidad INT,
+    IN _descripcion VARCHAR(200),
+    IN _precio INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    INSERT INTO `db_fincaturistica`.`insumos` (`nombre`, `cantidad`, `descripcion`, `precio`)
+    VALUES (_nombre, _cantidad, _descripcion, _precio);
+    SET _respuesta = LAST_INSERT_ID();
+END $$
+-- ====================================================================================== --
+
