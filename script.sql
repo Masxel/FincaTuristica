@@ -149,3 +149,54 @@ CREATE TABLE `db_fincaturistica`.`tienda_local` (
     PRIMARY KEY(`id`)
 );
 
+
+-- ==================== VALORES INICIALES PARA TRABAJAR CON LAS TABLAS CREADAS ===================== --
+-- Los valores son basicos para el inicio de un producto, como llenar estados, cargos, metodos de pago, tienda local, etc.
+-- Pero que no hacen parte del proyecto final, ya que estos valores pueden ser modificados por el administrador de la finca turistica
+
+INSERT INTO `db_fincaturistica`.`estadoreserva` (`descripcion`) VALUES
+('Pendiente'),
+('Confirmada'),
+('Cancelada');
+
+INSERT INTO `db_fincaturistica`.`eventos` (`descripcion`) VALUES
+('Decoracion aniversario'),
+('Decoracion cumpleaños'),
+('Decoracion amor y amistad'),
+('Decoracion dia de sol');
+
+INSERT INTO `db_fincaturistica`.`estadohabitacion` (`descripcion`) VALUES
+('Disponible'),
+('Ocupada'),
+('En mantenimiento');
+
+INSERT INTO `db_fincaturistica`.`cargo` (`descripcion`) VALUES
+('Administrador'),
+('Recepcionista'),
+('Personal de limpieza');
+
+INSERT INTO `db_fincaturistica`.`insumos` (`nombre`, `cantidad`, `descripcion`, `precio`) VALUES
+('Jabón', 100, 'Jabón para limpieza', 500),
+('Toalla', 50, 'Toalla de baño', 1500),
+('Almohada', 30, 'Almohada de plumas', 2000),
+('Cobija', 20, 'Cobija para cama doble', 3000);
+
+INSERT INTO `db_fincaturistica`.`metodo_pago` (`descripcion`) VALUES
+('Efectivo'),
+('Tarjeta de credito'),
+('Transferencia bancaria');
+
+INSERT INTO `db_fincaturistica`.`zonas_entretenimiento` (`nombre`, `descripcion`, `estado`) VALUES
+('Piscina', 'Zona de relajacion con piscina', 1),
+('Jacuzzi', 'Zona de relajacion con jacuzzi', 1),
+('Cancha de tenis', 'Zona deportiva', 1);
+
+INSERT INTO `db_fincaturistica`.`menualimentacion` (`dia`, `plato_principal`, `acompanamiento`, `postre`) VALUES
+('Lunes', 'Pollo asado', 'Ensalada', 'Yogurt con frutas'),
+('Martes', 'Pastas', 'Pan de ajo', 'Pastel'),
+('Miércoles', 'Salmón', 'Arroz', 'Helado');
+
+INSERT INTO `db_fincaturistica`.`tienda_local` (`nombre`, `descripcion`, `precio`, `cantidaddisponible`) VALUES
+('Crema solar', 'Proteccion solar', 20000, 100),
+('Insecticida', 'Repelente contra insectos', 15000, 50),
+('Recuerdo de la finca', 'Iman de nevera', 5000, 200);

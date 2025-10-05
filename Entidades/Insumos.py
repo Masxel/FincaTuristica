@@ -3,7 +3,7 @@ class Insumos:
     nombre: str = ""
     cantidad: int = 0
     descripcion: str = ""
-    precio: int = 0
+    precio: int = 0 # Precio por unidad
     
     def GetId(self) -> int:
         return self.id
