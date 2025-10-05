@@ -201,8 +201,6 @@ INSERT INTO `db_fincaturistica`.`tienda_local` (`nombre`, `descripcion`, `precio
 ('Insecticida', 'Repelente contra insectos', 15000, 50),
 ('Recuerdo de la finca', 'Iman de nevera', 5000, 200);
 
-
-
 -- ==================== PROCEDIMIENTOS ALMACENADOS PARA NUEVOS INSUMOS ===================== --
 DELIMITER $$
 

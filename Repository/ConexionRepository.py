@@ -15,4 +15,6 @@ class ConexionRepository:
     def conectar_base_datos(self) -> pyodbc.Connection:
         self._cadena_de_conexion()
         return pyodbc.connect(self.__str_conexion)
-        
+
+    def cerrar_conexion(self, conexion: pyodbc.Connection) -> None:
+        conexion.close()
