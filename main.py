@@ -2,6 +2,7 @@ from Repository.ConexionRepository import ConexionRepository
 from Services.ConexionService import ConexionService
 from Services.InsumosService import InsumosService  
 from Services.HabitacionService import HabitacionService
+from Services.TiendaLocalService import TiendaLocalService
 
 def mostrar_menu():
     print("SISTEMA FINCA TURÍSTICA")
@@ -67,7 +68,8 @@ def Inicio():
             pass
         
         elif opcion == "13":
-            pass
+            servicio = TiendaLocalService()
+            servicio.MenuTiendaLocal()
             
         elif opcion == "14":
             pass

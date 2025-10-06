@@ -35,7 +35,33 @@ class InsumosRepository:
             return 0
     
     def actualizar(self, insumo):
-        pass
+        try:
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+
+            id_insumo = insumo.idInsumo
+            nombre = insumo.nombre
+            cantidad = insumo.cantidad
+            descripcion = insumo.descripcion
+            precio = insumo.precio
+            
+            cursor.execute(
+                "CALL proc_actualizar_insumo(?, ?, ?, ?, ?, @respuesta)",
+                (id_insumo, nombre, cantidad, descripcion, precio)
+            )
+            
+            cursor.execute("SELECT @respuesta")
+            resultado = cursor.fetchone()
+            respuesta = resultado[0] if resultado else 0
+            
+            conn.commit()
+            cursor.close()
+            conn.close()
+            
+            return respuesta
+        except Exception as e:
+            print(f"Error al actualizar insumo: {e}")
+            return 0
     
     def eliminar(self, idInsumo):
         try:

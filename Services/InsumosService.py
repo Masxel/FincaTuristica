@@ -40,6 +40,30 @@ class InsumosService:
             print("Insumo eliminado correctamente.")
         else:
             print("Error al eliminar insumo.")
+            
+    def ActualizarInsumo(self):
+        print("Mostraremos todos los insumos disponibles para que pueda elegir el ID a actualizar: ")
+        self.ConsultarInsumos()
+        print("") 
+        id_insumo = int(input("Ingrese el ID del insumo a actualizar: "))
+                
+        nombre = input("Ingrese el nuevo nombre del insumo: ")
+        cantidad = int(input("Ingrese la nueva cantidad del insumo: "))
+        descripcion = input("Ingrese la nueva descripcion del insumo: ")
+        precio = float(input("Ingrese el nuevo precio del insumo: "))
+        
+        EntidadInsumo = Insumos()
+        EntidadInsumo.SetIdInsumo(id_insumo)
+        EntidadInsumo.SetNombre(nombre)
+        EntidadInsumo.SetCantidad(cantidad)
+        EntidadInsumo.SetDescripcion(descripcion)
+        EntidadInsumo.SetPrecio(precio)
+
+        respuesta = InsumosRepository().actualizar(EntidadInsumo)
+        if respuesta != 0:
+            print("Insumo actualizado correctamente.")
+        else:
+            print("Error al actualizar insumo.")
 
     def MenuInsumos(self):
         while True:
@@ -55,7 +79,7 @@ class InsumosService:
             if opcion == '1':
                 self.InsertarInsumo()
             elif opcion == '2':
-                pass
+                self.ActualizarInsumo()
             elif opcion == '3':
                 self.EliminarInsumo()
             elif opcion == '4':

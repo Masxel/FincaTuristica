@@ -245,3 +245,94 @@ BEGIN
     SET _respuesta = ROW_COUNT();
 END $$
 -- ====================================================================================== --
+
+-- =================== PROCEDIMIENTOS ALMACENADOS PARA ACTUALIZAR INSUMO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_insumo` (
+    IN _id INT,
+    IN _nombre VARCHAR(45),
+    IN _cantidad INT,
+    IN _descripcion VARCHAR(200),
+    IN _precio INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`insumos`
+    SET `nombre` = _nombre,
+        `cantidad` = _cantidad,
+        `descripcion` = _descripcion,
+        `precio` = _precio
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA TIENDA LOCAL ===================== --
+
+-- ==================== INSERTAR PRODUCTO EN TIENDA LOCAL ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_tienda_local` (
+    IN _nombre VARCHAR(100),
+    IN _descripcion VARCHAR(200),
+    IN _precio INT,
+    IN _cantidaddisponible INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    INSERT INTO `db_fincaturistica`.`tienda_local` (`nombre`, `descripcion`, `precio`, `cantidaddisponible`)
+    VALUES (_nombre, _descripcion, _precio, _cantidaddisponible);
+    SET _respuesta = LAST_INSERT_ID();
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS PRODUCTOS DE TIENDA LOCAL ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_todos_tienda_local` ()
+BEGIN
+    SELECT `id`, `nombre`, `descripcion`, `precio`, `cantidaddisponible`
+    FROM `db_fincaturistica`.`tienda_local`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR PRODUCTO DE TIENDA LOCAL ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_tienda_local` (
+    IN _id INT,
+    IN _nombre VARCHAR(100),
+    IN _descripcion VARCHAR(200),
+    IN _precio INT,
+    IN _cantidaddisponible INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`tienda_local`
+    SET `nombre` = _nombre,
+        `descripcion` = _descripcion,
+        `precio` = _precio,
+        `cantidaddisponible` = _cantidaddisponible
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR PRODUCTO DE TIENDA LOCAL ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_tienda_local` (
+    IN _id INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`tienda_local`
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
