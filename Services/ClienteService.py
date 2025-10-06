@@ -3,6 +3,8 @@ from Repository.ClienteRepository import ClienteRepository
 
 class ClienteService:
     
+    UltimoId: int
+    
     def InsertarCliente(self):
         nombre = input("Ingrese el nombre del cliente: ")
         apellido = input("Ingrese el apellido del cliente: ")
@@ -17,6 +19,7 @@ class ClienteService:
 
         respuesta = ClienteRepository().insertar(EntidadCliente)
         if respuesta:
+            self.UltimoId = respuesta
             print("Cliente insertado correctamente.")
         else:
             print("Error al insertar cliente.")

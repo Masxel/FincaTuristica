@@ -404,3 +404,183 @@ BEGIN
     SET _respuesta = ROW_COUNT();
 END $$
 -- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA HABITACIONES ===================== --
+
+-- ==================== INSERTAR HABITACION ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_habitacion` (
+    IN _tipohabitacion VARCHAR(45),
+    IN _precio INT,
+    IN _capacidad INT,
+    IN _estado INT,
+    IN _descripcion VARCHAR(200),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    INSERT INTO `db_fincaturistica`.`habitacion` (`tipohabitacion`, `precio`, `capacidad`, `estado`, `descripcion`)
+    VALUES (_tipohabitacion, _precio, _capacidad, _estado, _descripcion);
+    SET _respuesta = LAST_INSERT_ID();
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODAS LAS HABITACIONES ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_todas_habitaciones` ()
+BEGIN
+    SELECT h.`id`, h.`tipohabitacion`, h.`precio`, h.`capacidad`, h.`estado`, h.`descripcion`, eh.`descripcion` as estado_descripcion
+    FROM `db_fincaturistica`.`habitacion` h
+    INNER JOIN `db_fincaturistica`.`estadohabitacion` eh ON h.`estado` = eh.`id`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR HABITACION ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_habitacion` (
+    IN _id INT,
+    IN _tipohabitacion VARCHAR(45),
+    IN _precio INT,
+    IN _capacidad INT,
+    IN _estado INT,
+    IN _descripcion VARCHAR(200),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`habitacion`
+    SET `tipohabitacion` = _tipohabitacion,
+        `precio` = _precio,
+        `capacidad` = _capacidad,
+        `estado` = _estado,
+        `descripcion` = _descripcion
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR HABITACION ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_habitacion` (
+    IN _id INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`habitacion`
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA RESERVAS ===================== --
+
+-- ==================== INSERTAR RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_reserva` (
+    IN _fechallegada DATE,
+    IN _fechasalida DATE,
+    IN _idcliente INT,
+    IN _idhabitacion INT,
+    IN _estadoreserva INT,
+    IN _idevento INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    INSERT INTO `db_fincaturistica`.`reserva` (`fechallegada`, `fechasalida`, `idcliente`, `idhabitacion`, `estadoreserva`, `idevento`)
+    VALUES (_fechallegada, _fechasalida, _idcliente, _idhabitacion, _estadoreserva, _idevento);
+    SET _respuesta = LAST_INSERT_ID();
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODAS LAS RESERVAS ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_todas_reservas` ()
+BEGIN
+    SELECT r.`id`, r.`fechallegada`, r.`fechasalida`, r.`idcliente`, r.`idhabitacion`, r.`estadoreserva`, r.`idevento`,
+           CONCAT(c.`nombre`, ' ', c.`apellido`) as cliente_nombre,
+           CONCAT(h.`tipohabitacion`, ' - ', h.`descripcion`) as habitacion_info,
+           er.`descripcion` as estado_descripcion,
+           e.`descripcion` as evento_descripcion
+    FROM `db_fincaturistica`.`reserva` r
+    INNER JOIN `db_fincaturistica`.`cliente` c ON r.`idcliente` = c.`id`
+    INNER JOIN `db_fincaturistica`.`habitacion` h ON r.`idhabitacion` = h.`id`
+    INNER JOIN `db_fincaturistica`.`estadoreserva` er ON r.`estadoreserva` = er.`id`
+    LEFT JOIN `db_fincaturistica`.`eventos` e ON r.`idevento` = e.`id`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_reserva` (
+    IN _id INT,
+    IN _fechallegada DATE,
+    IN _fechasalida DATE,
+    IN _idcliente INT,
+    IN _idhabitacion INT,
+    IN _estadoreserva INT,
+    IN _idevento INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`reserva`
+    SET `fechallegada` = _fechallegada,
+        `fechasalida` = _fechasalida,
+        `idcliente` = _idcliente,
+        `idhabitacion` = _idhabitacion,
+        `estadoreserva` = _estadoreserva,
+        `idevento` = _idevento
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_reserva` (
+    IN _id INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`reserva`
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA ESTADOS DE RESERVA ===================== --
+
+-- ==================== CONSULTAR ESTADOS DE RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_estados_reserva` ()
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`estadoreserva`
+    ORDER BY `id`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA EVENTOS ===================== --
+
+-- ==================== CONSULTAR EVENTOS DISPONIBLES ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_eventos` ()
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`eventos`
+    ORDER BY `id`;
+END $$
+-- ====================================================================================== --
