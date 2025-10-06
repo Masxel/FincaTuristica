@@ -336,3 +336,71 @@ BEGIN
     SET _respuesta = ROW_COUNT();
 END $$
 -- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA CLIENTES ===================== --
+
+-- ==================== INSERTAR CLIENTE ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_cliente` (
+    IN _nombre VARCHAR(45),
+    IN _apellido VARCHAR(45),
+    IN _telefono VARCHAR(15),
+    IN _email VARCHAR(45),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    INSERT INTO `db_fincaturistica`.`cliente` (`nombre`, `apellido`, `telefono`, `email`)
+    VALUES (_nombre, _apellido, _telefono, _email);
+    SET _respuesta = LAST_INSERT_ID();
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS CLIENTES ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_todos_clientes` ()
+BEGIN
+    SELECT `id`, `nombre`, `apellido`, `telefono`, `email`
+    FROM `db_fincaturistica`.`cliente`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR CLIENTE ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_cliente` (
+    IN _id INT,
+    IN _nombre VARCHAR(45),
+    IN _apellido VARCHAR(45),
+    IN _telefono VARCHAR(15),
+    IN _email VARCHAR(45),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`cliente`
+    SET `nombre` = _nombre,
+        `apellido` = _apellido,
+        `telefono` = _telefono,
+        `email` = _email
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR CLIENTE ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_cliente` (
+    IN _id INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`cliente`
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --

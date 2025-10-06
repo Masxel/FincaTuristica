@@ -3,6 +3,7 @@ from Services.ConexionService import ConexionService
 from Services.InsumosService import InsumosService  
 from Services.HabitacionService import HabitacionService
 from Services.TiendaLocalService import TiendaLocalService
+from Services.ClienteService import ClienteService
 
 def mostrar_menu():
     print("SISTEMA FINCA TURÍSTICA")
@@ -19,8 +20,7 @@ def mostrar_menu():
     print("11. Gestión de Opiniones")
     print("12. Gestión de Menús")
     print("13. Gestión de Tienda Local")
-    print("14. Configuraciones")
-    print("15. Salir")
+    print("14. Salir")
 
 def Inicio():
     while True:
@@ -30,7 +30,8 @@ def Inicio():
         opcion = input("\nSeleccione una opción (1-15): ").strip()
         
         if opcion == "1":
-            pass
+            servicio = ClienteService()
+            servicio.MenuClientes()
             
         elif opcion == "2":
             pass
@@ -72,11 +73,8 @@ def Inicio():
             servicio.MenuTiendaLocal()
             
         elif opcion == "14":
-            pass
-        
-        elif opcion == "15":
             break
-            
+    
         else:
             print("Opción inválida. Por favor ingrese un número del 1 al 15.")
         
