@@ -1,4 +1,4 @@
-from Entidades.Insumos import Insumos
+from Models.Insumos import Insumos
 from Repository.InsumosRepository import InsumosRepository
 
 class InsumosService:

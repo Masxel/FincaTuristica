@@ -1,4 +1,4 @@
-from Entidades.Cliente import Cliente
+from Models.Cliente import Cliente
 from Repository.ClienteRepository import ClienteRepository
 
 class ClienteService:

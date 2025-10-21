@@ -1,4 +1,4 @@
-from Entidades.Habitacion import Habitacion
+from Models.Habitacion import Habitacion
 from Repository.HabitacionRepository import HabitacionRepository
 
 class HabitacionService:

@@ -1,5 +1,5 @@
 from datetime import datetime
-from Entidades.Reserva import Reserva
+from Models.Reserva import Reserva
 from Repository.ReservaRepository import ReservaRepository
 from Services.ClienteService import ClienteService
 

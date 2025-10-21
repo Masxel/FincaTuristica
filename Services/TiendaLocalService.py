@@ -1,4 +1,4 @@
-from Entidades.TiendaLocal import TiendaLocal
+from Models.TiendaLocal import TiendaLocal
 from Repository.TiendaLocalRepository import TiendaLocalRepository
 
 class TiendaLocalService:
