@@ -665,4 +665,199 @@ BEGIN
     
     COMMIT;
 END $$
+
+DELIMITER ;
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA EMPLEADOS ===================== --
+
+-- ==================== INSERTAR EMPLEADO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_empleado` (
+    IN p_nombre VARCHAR(45),
+    IN p_apellido VARCHAR(45),
+    IN p_telefono VARCHAR(15),
+    IN p_email VARCHAR(45),
+    IN p_cargo INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    INSERT INTO `db_fincaturistica`.`empleados` (`nombre`, `apellido`, `telefono`, `email`, `cargo`)
+    VALUES (p_nombre, p_apellido, p_telefono, p_email, p_cargo);
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS EMPLEADOS ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_empleados` ()
+BEGIN
+    SELECT e.`id`, e.`nombre`, e.`apellido`, e.`telefono`, e.`email`, e.`cargo`, c.`descripcion` as `cargo_descripcion`
+    FROM `db_fincaturistica`.`empleados` e
+    LEFT JOIN `db_fincaturistica`.`cargo` c ON e.`cargo` = c.`id`
+    ORDER BY e.`id`;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR EMPLEADO POR ID ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_empleado_por_id` (
+    IN p_id INT
+)
+BEGIN
+    SELECT e.`id`, e.`nombre`, e.`apellido`, e.`telefono`, e.`email`, e.`cargo`, c.`descripcion` as `cargo_descripcion`
+    FROM `db_fincaturistica`.`empleados` e
+    LEFT JOIN `db_fincaturistica`.`cargo` c ON e.`cargo` = c.`id`
+    WHERE e.`id` = p_id;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR EMPLEADO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_empleado` (
+    IN p_id INT,
+    IN p_nombre VARCHAR(45),
+    IN p_apellido VARCHAR(45),
+    IN p_telefono VARCHAR(15),
+    IN p_email VARCHAR(45),
+    IN p_cargo INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    UPDATE `db_fincaturistica`.`empleados`
+    SET `nombre` = p_nombre,
+        `apellido` = p_apellido,
+        `telefono` = p_telefono,
+        `email` = p_email,
+        `cargo` = p_cargo
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR EMPLEADO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_empleado` (
+    IN p_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    DELETE FROM `db_fincaturistica`.`empleados`
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA CARGO ===================== --
+
+-- ==================== INSERTAR CARGO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_cargo` (
+    IN p_descripcion VARCHAR(45)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    INSERT INTO `db_fincaturistica`.`cargo` (`descripcion`)
+    VALUES (p_descripcion);
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS CARGOS ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_cargos` ()
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`cargo`
+    ORDER BY `id`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR CARGO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_cargo` (
+    IN p_id INT,
+    IN p_descripcion VARCHAR(45)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    UPDATE `db_fincaturistica`.`cargo`
+    SET `descripcion` = p_descripcion
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR CARGO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_cargo` (
+    IN p_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    DELETE FROM `db_fincaturistica`.`cargo`
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
 -- ====================================================================================== --

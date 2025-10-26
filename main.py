@@ -1,5 +1,7 @@
 from Repository.ConexionRepository import ConexionRepository
+from Services.CargoService import CargoService
 from Services.ConexionService import ConexionService
+from Services.EventosService import EventosService
 from Services.InsumosService import InsumosService  
 from Services.HabitacionService import HabitacionService
 from Services.TiendaLocalService import TiendaLocalService
@@ -20,15 +22,16 @@ def mostrar_menu():
     print("10. Gestión de Opiniones")
     print("11. Gestión de Menús")
     print("12. Gestión de Tienda Local")
-    print("13. Probar Conexión a la Base de Datos")
-    print("14. Salir")
+    print("13. Gestión de Eventos")
+    print("14. Probar Conexión a la Base de Datos")
+    print("15. Salir")
 
 def Inicio():
     while True:
         mostrar_menu()
         
         # Capturar la opción del usuario
-        opcion = input("\nSeleccione una opción (1-14): ").strip()
+        opcion = input("\nSeleccione una opción (1-15): ").strip()
 
         if opcion == "1":
             servicio = ClienteService()
@@ -49,6 +52,8 @@ def Inicio():
             pass
             
         elif opcion == "5":
+            servicio = CargoService()
+            servicio.MenuCargos()
             pass
 
         elif opcion == "6":
@@ -77,14 +82,16 @@ def Inicio():
             pass
 
         elif opcion == "13":
-            servicio = ConexionService()
-            servicio.probarconexion()
+            servicio = EventosService()
+            servicio.MenuEventos()
             pass
 
         elif opcion == "14":
+            servicio = ConexionService()
+            servicio.probarconexion()
             break
         else:
-            print("Opción inválida. Por favor ingrese un número del 1 al 14.")
+            print("Opción inválida. Por favor ingrese un número del 1 al 15.")
 
         input("Presione Enter para continuar...")
 
