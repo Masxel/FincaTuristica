@@ -1,6 +1,8 @@
 from Repository.ConexionRepository import ConexionRepository
+from Services import MenuAlimentacionService, MetodoPagoService
 from Services.CargoService import CargoService
 from Services.ConexionService import ConexionService
+from Services.EmpleadosService import EmpleadosService
 from Services.EventosService import EventosService
 from Services.InsumosService import InsumosService  
 from Services.HabitacionService import HabitacionService
@@ -20,7 +22,7 @@ def mostrar_menu():
     print("8. Gestión de Métodos de Pago")
     print("9. Gestión de Zonas de Entretenimiento")
     print("10. Gestión de Opiniones")
-    print("11. Gestión de Menús")
+    print("11. Gestión de Menú alimentación")
     print("12. Gestión de Tienda Local")
     print("13. Gestión de Eventos")
     print("14. Probar Conexión a la Base de Datos")
@@ -49,6 +51,8 @@ def Inicio():
             pass
             
         elif opcion == "4":
+            servicio = EmpleadosService()
+            servicio.MenuEmpleados()
             pass
             
         elif opcion == "5":
@@ -65,6 +69,8 @@ def Inicio():
             pass
 
         elif opcion == "8":
+            servicio = MetodoPagoService()
+            servicio.MenuMetodosPago()
             pass
 
         elif opcion == "9":
@@ -74,6 +80,8 @@ def Inicio():
             pass
         
         elif opcion == "11":
+            servicio = MenuAlimentacionService()
+            servicio.MenuMenuAlimentacion()
             pass
 
         elif opcion == "12":

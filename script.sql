@@ -855,7 +855,181 @@ BEGIN
     
     START TRANSACTION;
     
-    DELETE FROM `db_fincaturistica`.`cargo`
+    DELETE FROM `db_fincaturistica`.`metodo_pago`
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA MENÚ ALIMENTACIÓN ===================== --
+
+-- ==================== INSERTAR MENÚ ALIMENTACIÓN ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_menu_alimentacion` (
+    IN p_dia VARCHAR(15),
+    IN p_plato_principal VARCHAR(100),
+    IN p_acompanamiento VARCHAR(100),
+    IN p_postre VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    INSERT INTO `db_fincaturistica`.`menualimentacion` (`dia`, `plato_principal`, `acompanamiento`, `postre`)
+    VALUES (p_dia, p_plato_principal, p_acompanamiento, p_postre);
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR MENÚS DE ALIMENTACIÓN ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_menus_alimentacion` ()
+BEGIN
+    SELECT `id`, `dia`, `plato_principal`, `acompanamiento`, `postre`
+    FROM `db_fincaturistica`.`menualimentacion`
+    ORDER BY `id`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR MENÚ ALIMENTACIÓN ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_menu_alimentacion` (
+    IN p_id INT,
+    IN p_dia VARCHAR(15),
+    IN p_plato_principal VARCHAR(100),
+    IN p_acompanamiento VARCHAR(100),
+    IN p_postre VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    UPDATE `db_fincaturistica`.`menualimentacion`
+    SET `dia` = p_dia,
+        `plato_principal` = p_plato_principal,
+        `acompanamiento` = p_acompanamiento,
+        `postre` = p_postre
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR MENÚ ALIMENTACIÓN ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_menu_alimentacion` (
+    IN p_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    DELETE FROM `db_fincaturistica`.`menualimentacion`
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA MÉTODO DE PAGO ===================== --
+
+-- ==================== INSERTAR MÉTODO DE PAGO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_metodo_pago` (
+    IN p_descripcion VARCHAR(45)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    INSERT INTO `db_fincaturistica`.`metodo_pago` (`descripcion`)
+    VALUES (p_descripcion);
+    
+    COMMIT;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS MÉTODOS DE PAGO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_metodos_pago` ()
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`metodo_pago`
+    ORDER BY `id`;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR MÉTODO DE PAGO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_metodo_pago` (
+    IN p_id INT,
+    IN p_descripcion VARCHAR(45)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    UPDATE `db_fincaturistica`.`metodo_pago`
+    SET `descripcion` = p_descripcion
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR MÉTODO DE PAGO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_metodo_pago` (
+    IN p_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    DELETE FROM `db_fincaturistica`.`metodo_pago`
     WHERE `id` = p_id;
     
     COMMIT;
