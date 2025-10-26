@@ -574,6 +574,28 @@ END $$
 
 -- ==================== PROCEDIMIENTOS ALMACENADOS PARA EVENTOS ===================== --
 
+-- ==================== INSERTAR EVENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_evento` (
+    IN p_descripcion VARCHAR(200)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    INSERT INTO `db_fincaturistica`.`eventos` (`descripcion`)
+    VALUES (p_descripcion);
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
 -- ==================== CONSULTAR EVENTOS DISPONIBLES ===================== --
 DELIMITER $$
 
@@ -582,5 +604,65 @@ BEGIN
     SELECT `id`, `descripcion`
     FROM `db_fincaturistica`.`eventos`
     ORDER BY `id`;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR EVENTO POR ID ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_evento_por_id` (
+    IN p_id INT
+)
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`eventos`
+    WHERE `id` = p_id;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR EVENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_evento` (
+    IN p_id INT,
+    IN p_descripcion VARCHAR(200)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    UPDATE `db_fincaturistica`.`eventos`
+    SET `descripcion` = p_descripcion
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR EVENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_evento` (
+    IN p_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    DELETE FROM `db_fincaturistica`.`eventos`
+    WHERE `id` = p_id;
+    
+    COMMIT;
 END $$
 -- ====================================================================================== --
