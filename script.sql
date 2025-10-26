@@ -951,6 +951,98 @@ BEGIN
     
     COMMIT;
 END $$
+
+DELIMITER ;
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA ZONAS ENTRETENIMIENTO ===================== --
+
+-- ==================== INSERTAR ZONA ENTRETENIMIENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_zona_entretenimiento` (
+    IN p_nombre VARCHAR(45),
+    IN p_descripcion VARCHAR(200),
+    IN p_estado INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    INSERT INTO `db_fincaturistica`.`zonas_entretenimiento` (`nombre`, `descripcion`, `estado`)
+    VALUES (p_nombre, p_descripcion, p_estado);
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR ZONAS DE ENTRETENIMIENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_zonas_entretenimiento` ()
+BEGIN
+    SELECT `id`, `nombre`, `descripcion`, `estado`
+    FROM `db_fincaturistica`.`zonas_entretenimiento`
+    ORDER BY `id`;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR ZONA ENTRETENIMIENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_zona_entretenimiento` (
+    IN p_id INT,
+    IN p_nombre VARCHAR(45),
+    IN p_descripcion VARCHAR(200),
+    IN p_estado INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    UPDATE `db_fincaturistica`.`zonas_entretenimiento`
+    SET `nombre` = p_nombre,
+        `descripcion` = p_descripcion,
+        `estado` = p_estado
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR ZONA ENTRETENIMIENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_zona_entretenimiento` (
+    IN p_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    DELETE FROM `db_fincaturistica`.`zonas_entretenimiento`
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+
 -- ====================================================================================== --
 
 -- ==================== PROCEDIMIENTOS ALMACENADOS PARA MÉTODO DE PAGO ===================== --

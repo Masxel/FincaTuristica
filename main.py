@@ -1,5 +1,5 @@
 from Repository.ConexionRepository import ConexionRepository
-from Services import MenuAlimentacionService, MetodoPagoService
+from Services import MenuAlimentacionService, MetodoPagoService, ZonasEntretenimientoService
 from Services.CargoService import CargoService
 from Services.ConexionService import ConexionService
 from Services.EmpleadosService import EmpleadosService
@@ -31,8 +31,7 @@ def mostrar_menu():
 def Inicio():
     while True:
         mostrar_menu()
-        
-        # Capturar la opción del usuario
+                
         opcion = input("\nSeleccione una opción (1-15): ").strip()
 
         if opcion == "1":
@@ -74,6 +73,8 @@ def Inicio():
             pass
 
         elif opcion == "9":
+            servicio = ZonasEntretenimientoService()
+            servicio.MenuZonasEntretenimiento()
             pass
 
         elif opcion == "10":
