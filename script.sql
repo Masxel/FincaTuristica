@@ -1043,6 +1043,97 @@ BEGIN
     COMMIT;
 END $$
 
+DELIMITER ;
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA OPINIONES ===================== --
+
+-- ==================== INSERTAR OPINIÓN ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_opinion` (
+    IN p_idcliente INT,
+    IN p_calificacion INT,
+    IN p_comentario VARCHAR(500)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    INSERT INTO `db_fincaturistica`.`opinion` (`idcliente`, `calificacion`, `comentario`)
+    VALUES (p_idcliente, p_calificacion, p_comentario);
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR OPINIONES CON INFORMACIÓN DE CLIENTE ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_opiniones` ()
+BEGIN
+    SELECT o.`id`, o.`idcliente`, c.`nombre`, c.`apellido`, o.`calificacion`, o.`comentario`
+    FROM `db_fincaturistica`.`opinion` o
+    LEFT JOIN `db_fincaturistica`.`cliente` c ON o.`idcliente` = c.`id`
+    ORDER BY o.`id` DESC;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR OPINIÓN ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_opinion` (
+    IN p_id INT,
+    IN p_idcliente INT,
+    IN p_calificacion INT,
+    IN p_comentario VARCHAR(500)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    UPDATE `db_fincaturistica`.`opinion`
+    SET `idcliente` = p_idcliente,
+        `calificacion` = p_calificacion,
+        `comentario` = p_comentario
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR OPINIÓN ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_opinion` (
+    IN p_id INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    DELETE FROM `db_fincaturistica`.`opinion`
+    WHERE `id` = p_id;
+    
+    COMMIT;
+END $$
+-- ====================================================================================== --
+
 -- ====================================================================================== --
 
 -- ==================== PROCEDIMIENTOS ALMACENADOS PARA MÉTODO DE PAGO ===================== --

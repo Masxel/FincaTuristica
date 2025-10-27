@@ -1,5 +1,5 @@
 from Repository.ConexionRepository import ConexionRepository
-from Services import MenuAlimentacionService, MetodoPagoService, ZonasEntretenimientoService
+from Services import MenuAlimentacionService, MetodoPagoService, OpinionService, ZonasEntretenimientoService
 from Services.CargoService import CargoService
 from Services.ConexionService import ConexionService
 from Services.EmpleadosService import EmpleadosService
@@ -78,6 +78,8 @@ def Inicio():
             pass
 
         elif opcion == "10":
+            servicio = OpinionService()
+            servicio.MenuOpiniones()
             pass
         
         elif opcion == "11":
