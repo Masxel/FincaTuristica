@@ -367,6 +367,19 @@ BEGIN
 END $$
 -- ====================================================================================== --
 
+-- ==================== CONSULTAR CLIENTE POR ID ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_cliente_por_id` (
+    IN _id INT
+)
+BEGIN
+    SELECT `id`, `nombre`, `apellido`, `telefono`, `email`
+    FROM `db_fincaturistica`.`cliente`
+    WHERE `id` = _id;
+END $$
+-- ====================================================================================== --
+
 -- ==================== ACTUALIZAR CLIENTE ===================== --
 DELIMITER $$
 

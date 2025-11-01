@@ -1,5 +1,6 @@
 import json
 from flask import Blueprint, jsonify, request
+from Models.Cliente import Cliente
 from Repository.ClienteRepository import ClienteRepository
 
 # Crear Blueprint para clientes
@@ -28,17 +29,74 @@ def CargarClientes(entrada: str):
         return jsonify(respuesta), 500
 
 @clientes_bp.route('/api/clientes', methods=["GET"])
-def obtener_clientes():
-    """Obtener todos los clientes"""
+def obtener_clientes(): 
     try:
-        clientes = ClienteRepository().consultar()
+        datos_clientes = ClienteRepository().consultar()
+        
+        lista_clientes = []
+        
+        if datos_clientes:
+            for dato in datos_clientes:
+                cliente = Cliente()
+                cliente.SetId(dato[0])
+                cliente.SetNombre(dato[1])
+                cliente.SetApellido(dato[2])
+                cliente.SetTelefono(dato[3])
+                cliente.SetEmail(dato[4])
+                
+                cliente_dict = {
+                    "id": cliente.GetId(),
+                    "nombre": cliente.GetNombre(),
+                    "apellido": cliente.GetApellido(), 
+                    "telefono": cliente.GetTelefono(),
+                    "email": cliente.GetEmail()
+                }
+                
+                lista_clientes.append(cliente_dict)
         
         return jsonify({
-            "clientes": clientes,
-            "total": len(clientes) if clientes else 0,
+            "clientes": lista_clientes,
+            "cantidad_total_clientes": len(lista_clientes),
             "status": "success"
         })
         
+    except Exception as ex:
+        return jsonify({
+            "error": str(ex),
+            "status": "error"
+        }), 500
+
+@clientes_bp.route('/api/clientes/<int:id_cliente>', methods=["GET"])
+def obtener_cliente_por_id(id_cliente):
+    try:
+        dato_cliente = ClienteRepository().consultar_por_id(id_cliente)
+        
+        if dato_cliente:
+            cliente = Cliente()
+            cliente.SetId(dato_cliente[0])
+            cliente.SetNombre(dato_cliente[1])
+            cliente.SetApellido(dato_cliente[2])
+            cliente.SetTelefono(dato_cliente[3])
+            cliente.SetEmail(dato_cliente[4])
+            
+            cliente_dict = {
+                "id": cliente.GetId(),
+                "nombre": cliente.GetNombre(),
+                "apellido": cliente.GetApellido(),
+                "telefono": cliente.GetTelefono(),
+                "email": cliente.GetEmail()
+            }
+            
+            return jsonify({
+                "cliente": cliente_dict,
+                "status": "success"
+            })
+        else:
+            return jsonify({
+                "mensaje": f"No se encontró cliente con ID {id_cliente}",
+                "status": "not_found"
+            }), 404
+            
     except Exception as ex:
         return jsonify({
             "error": str(ex),
@@ -49,11 +107,7 @@ def obtener_clientes():
 def crear_cliente():
     """Crear un nuevo cliente"""
     try:
-        # Obtener datos JSON del request
         data = request.get_json()
-        
-        # Aquí integrarías con ClienteService para crear el cliente
-        # Por ahora solo retorno confirmación
         
         return jsonify({
             "mensaje": "Cliente creado exitosamente",
@@ -61,6 +115,37 @@ def crear_cliente():
             "status": "success"
         }), 201
         
+    except Exception as ex:
+        return jsonify({
+            "error": str(ex),
+            "status": "error"
+        }), 500
+
+@clientes_bp.route('/api/clientes/<int:id_cliente>', methods=["DELETE"])
+def eliminar_cliente(id_cliente):
+    try:
+        cliente_existente = ClienteRepository().consultar_por_id(id_cliente)
+        
+        if not cliente_existente:
+            return jsonify({
+                "mensaje": f"No se encontró cliente con ID {id_cliente}",
+                "status": "not_found"
+            }), 404
+        
+        resultado = ClienteRepository().eliminar(id_cliente)
+        
+        if resultado > 0:
+            return jsonify({
+                "mensaje": f"Cliente con ID {id_cliente} eliminado exitosamente",
+                "id_eliminado": id_cliente,
+                "status": "success"
+            }), 200
+        else:
+            return jsonify({
+                "mensaje": f"No se pudo eliminar el cliente con ID {id_cliente}",
+                "status": "error"
+            }), 500
+            
     except Exception as ex:
         return jsonify({
             "error": str(ex),

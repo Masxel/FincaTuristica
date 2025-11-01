@@ -104,3 +104,20 @@ class ClienteRepository:
         except Exception as e:
             print(f"Error al consultar clientes: {e}")
             return []
+    
+    def consultar_por_id(self, id_cliente):
+        try:
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
+            cursor.execute("CALL proc_consultar_cliente_por_id(?)", (id_cliente,))
+
+            resultado = cursor.fetchone()
+            cursor.close()
+            conn.close()
+
+            return resultado
+
+        except Exception as e:
+            print(f"Error al consultar cliente por ID: {e}")
+            return None
