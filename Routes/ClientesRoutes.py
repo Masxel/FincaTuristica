@@ -3,30 +3,46 @@ from flask import Blueprint, jsonify, request
 from Models.Cliente import Cliente
 from Repository.ClienteRepository import ClienteRepository
 
-# Crear Blueprint para clientes
 clientes_bp = Blueprint('clientes', __name__)
 
-@clientes_bp.route('/api/clientes/<string:entrada>', methods=["GET"])
-def CargarClientes(entrada: str):
-    respuesta = {}
-    try:
-        # Limpiar entrada
-        entrada = entrada.replace("'", "")
-        respuesta = json.loads(entrada)
+@clientes_bp.route('/api/clientes', methods=["PUT"])
+def ActualizarCliente():
+    data = request.get_json()
+    try:        
+        clienteConsultado = ClienteRepository().consultar_por_id(data.get("id"))
         
-        # Obtener clientes del repository
-        clientes = ClienteRepository().consultar()
-        
-        respuesta["Entidades"] = clientes
-        respuesta["Respuesta"] = "OK"
-        respuesta["Total"] = len(clientes) if clientes else 0
+        if clienteConsultado:
+            ClienteModel = Cliente()             
+            ClienteModel.SetId(clienteConsultado[0])
+            ClienteModel.SetNombre(data.get("nombre"))
+            ClienteModel.SetApellido(data.get("apellido"))
+            ClienteModel.SetTelefono(data.get("telefono"))
+            ClienteModel.SetEmail(data.get("email"))
             
-        return jsonify(respuesta)
+            servicio_cliente = ClienteRepository()
+            respuesta = servicio_cliente.actualizar(ClienteModel)
+
+            if respuesta > 0:
+                return jsonify({
+                    "mensaje": f"Cliente {data.get('id')} actualizado exitosamente",
+                    "status": "success"
+                }), 200
+            else:
+                return jsonify({
+                    "mensaje": f"Error al actualizar el cliente {data.get('id')}",
+                    "status": "error"
+                }), 500 
+        else:
+            return jsonify({
+                "mensaje": f"No se encontró cliente con ID {data.get('id')}",
+                "status": "not_found"
+            }), 404       
         
     except Exception as ex:
-        respuesta["Error"] = str(ex)
-        respuesta["Respuesta"] = "Error"
-        return jsonify(respuesta), 500
+        return jsonify({
+            "error": str(ex),
+            "status": "error"
+        }), 500
 
 @clientes_bp.route('/api/clientes', methods=["GET"])
 def obtener_clientes(): 
@@ -104,15 +120,30 @@ def obtener_cliente_por_id(id_cliente):
         }), 500
 
 @clientes_bp.route('/api/clientes', methods=["POST"])
-def crear_cliente():
-    """Crear un nuevo cliente"""
+def crear_cliente():   
     try:
         data = request.get_json()
         
-        return jsonify({
-            "mensaje": "Cliente creado exitosamente",
-            "data": data,
-            "status": "success"
+        ClienteModel = Cliente()
+        ClienteModel.SetId(data.get("id"))
+        ClienteModel.SetNombre(data.get("nombre"))
+        ClienteModel.SetApellido(data.get("apellido"))
+        ClienteModel.SetTelefono(data.get("telefono"))
+        ClienteModel.SetEmail(data.get("email"))
+
+        servicio_cliente = ClienteRepository()
+        nuevo_id = servicio_cliente.insertar(ClienteModel)
+
+        if nuevo_id == 0:
+            return jsonify({
+                "mensaje": "Error al crear el cliente",
+                "status": "error"
+            }), 500
+        else:
+            return jsonify({
+                "mensaje": f"Cliente {nuevo_id} creado exitosamente",
+                # "data": data,
+                "status": "success"
         }), 201
         
     except Exception as ex:
@@ -125,15 +156,15 @@ def crear_cliente():
 def eliminar_cliente(id_cliente):
     try:
         cliente_existente = ClienteRepository().consultar_por_id(id_cliente)
-        
+                
         if not cliente_existente:
             return jsonify({
                 "mensaje": f"No se encontró cliente con ID {id_cliente}",
                 "status": "not_found"
             }), 404
-        
+
         resultado = ClienteRepository().eliminar(id_cliente)
-        
+
         if resultado > 0:
             return jsonify({
                 "mensaje": f"Cliente con ID {id_cliente} eliminado exitosamente",
@@ -145,7 +176,7 @@ def eliminar_cliente(id_cliente):
                 "mensaje": f"No se pudo eliminar el cliente con ID {id_cliente}",
                 "status": "error"
             }), 500
-            
+
     except Exception as ex:
         return jsonify({
             "error": str(ex),
