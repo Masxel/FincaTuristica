@@ -10,19 +10,24 @@ class ClienteRepository:
             conn = self.conexion.conectar_base_datos()
             cursor = conn.cursor()
 
+            id_cliente = cliente.id
             nombre = cliente.nombre
             apellido = cliente.apellido
             telefono = cliente.telefono
             email = cliente.email
             
+            print(f"Insertando cliente con ID: {id_cliente}")
+            
             cursor.execute(
-                "CALL proc_insertar_cliente(?, ?, ?, ?, @respuesta)",
-                (nombre, apellido, telefono, email)
+                "CALL proc_insertar_cliente(?, ?, ?, ?, ?, @respuesta)",
+                (nombre, apellido, telefono, email, id_cliente)
             )
             
             cursor.execute("SELECT @respuesta")
             resultado = cursor.fetchone()
             respuesta = resultado[0] if resultado else 0
+            
+            print(f"Respuesta del stored procedure insertar: {respuesta}")
             
             conn.commit()
             cursor.close()
@@ -121,3 +126,12 @@ class ClienteRepository:
         except Exception as e:
             print(f"Error al consultar cliente por ID: {e}")
             return None
+    
+    def id_existe(self, id_cliente):
+        """Verificar si un ID de cliente ya existe"""
+        try:
+            resultado = self.consultar_por_id(id_cliente)
+            return resultado is not None
+        except Exception as e:
+            print(f"Error al verificar si ID existe: {e}")
+            return False

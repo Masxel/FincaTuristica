@@ -83,8 +83,8 @@ CREATE TABLE `db_fincaturistica`.`insumos` (
 
 -- Tabla para registrar los clientes que hacen reservas en la finca turistica.
 CREATE TABLE `db_fincaturistica`.`cliente` (
-    `id` INT AUTO_INCREMENT NOT NULL,
-    `nombre` VARCHAR(45) NOT NULL,
+    `id` INT NOT NULL,
+    `nombre` VARCHAR(45) NOT NULL,  
     `apellido` VARCHAR(45) NOT NULL,
     `telefono` VARCHAR(15) NOT NULL,
     `email` VARCHAR(45) NOT NULL,
@@ -343,6 +343,7 @@ END $$
 DELIMITER $$
 
 CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_cliente` (
+    IN _id INT,
     IN _nombre VARCHAR(45),
     IN _apellido VARCHAR(45),
     IN _telefono VARCHAR(15),
@@ -350,10 +351,15 @@ CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_cliente` (
     INOUT _respuesta INT
 )
 BEGIN
-    SET _respuesta = 0;
-    INSERT INTO `db_fincaturistica`.`cliente` (`nombre`, `apellido`, `telefono`, `email`)
-    VALUES (_nombre, _apellido, _telefono, _email);
-    SET _respuesta = LAST_INSERT_ID();
+   BEGIN
+    INSERT INTO `db_fincaturistica`.`cliente` (`id`, `nombre`, `apellido`, `telefono`, `email`)
+    VALUES (_id, _nombre, _apellido, _telefono, _email);
+    
+    IF ROW_COUNT() > 0 THEN
+        SET _respuesta = _id; 
+    ELSE
+        SET _respuesta = 0; 
+    END IF;
 END $$
 -- ====================================================================================== --
 
