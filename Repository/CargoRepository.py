@@ -1,4 +1,5 @@
 from Repository.ConexionRepository import ConexionRepository
+from Models.Cargo import Cargo
 
 class CargoRepository:
     
@@ -10,7 +11,10 @@ class CargoRepository:
             conn = self.conexion.conectar_base_datos()
             cursor = conn.cursor()
             
-            cursor.execute("CALL proc_insertar_cargo(?)", (cargo.get_descripcion(),))
+            descripcion = cargo.GetDescripcion()
+            
+            cursor.execute("CALL proc_insertar_cargo(?)", 
+                           (descripcion))
             cursor.commit()
                        
             return True
@@ -27,8 +31,7 @@ class CargoRepository:
             cursor = conn.cursor()
             
             cursor.execute("CALL proc_actualizar_cargo(?, ?)", 
-                         (cargo.get_id(), cargo.get_descripcion()))
-            
+                         (cargo.GetId(), cargo.GetDescripcion()))
             cursor.commit()
             
             return True
@@ -40,8 +43,11 @@ class CargoRepository:
     
     def eliminar(self, id):
         try:
-            cursor = self.conexion.obtener_cursor()
-            cursor.execute("CALL proc_eliminar_cargo(?)", (id,))
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
+            cursor.execute("CALL proc_eliminar_cargo(?)", (id))
+            
             cursor.commit()
             return True
         except Exception as e:
@@ -64,6 +70,4 @@ class CargoRepository:
             return resultados
         except Exception as e:
             print(f"Error al consultar cargos: {str(e)}")
-            return []
-        finally:
-            cursor.close()    
+            return []    
