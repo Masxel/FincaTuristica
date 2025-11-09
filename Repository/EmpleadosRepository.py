@@ -1,3 +1,4 @@
+from Models import Empleados
 from Repository.ConexionRepository import ConexionRepository
 
 class EmpleadosRepository:
@@ -7,13 +8,14 @@ class EmpleadosRepository:
     
     def insertar(self, empleado):
         try:
-            cursor = self.conexion.obtener_cursor()
-            cursor.execute("CALL proc_insertar_empleado(?, ?, ?, ?, ?)", 
-                         (empleado.get_nombre(), 
-                          empleado.get_apellido(),
-                          empleado.get_telefono(),
-                          empleado.get_email(),
-                          empleado.get_cargo()))
+            cursor = self.conexion.conectar_base_datos()
+            cursor.execute("CALL proc_insertar_empleado(?, ?, ?, ?, ?, ?)", 
+                         (empleado.GetNombre(), 
+                          empleado.GetApellido(),
+                          empleado.GetTelefono(),
+                          empleado.GetEmail(),
+                          empleado.GetCargo(),
+                          empleado.GetId()))
             cursor.commit()
             return True
         except Exception as e:
@@ -22,16 +24,16 @@ class EmpleadosRepository:
         finally:
             cursor.close()
     
-    def actualizar(self, empleado):
+    def actualizar(self, empleado: Empleados):
         try:
-            cursor = self.conexion.obtener_cursor()
+            cursor = self.conexion.conectar_base_datos()
             cursor.execute("CALL proc_actualizar_empleado(?, ?, ?, ?, ?, ?)", 
-                         (empleado.get_id(),
-                          empleado.get_nombre(), 
-                          empleado.get_apellido(),
-                          empleado.get_telefono(),
-                          empleado.get_email(),
-                          empleado.get_cargo()))
+                         (empleado.GetId(),
+                          empleado.GetNombre(), 
+                          empleado.GetApellido(),
+                          empleado.GetTelefono(),
+                          empleado.GetEmail(),
+                          empleado.GetCargo()))
             cursor.commit()
             return True
         except Exception as e:
@@ -42,9 +44,12 @@ class EmpleadosRepository:
     
     def eliminar(self, id):
         try:
-            cursor = self.conexion.obtener_cursor()
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
             cursor.execute("CALL proc_eliminar_empleado(?)", (id,))
             cursor.commit()
+            
             return True
         except Exception as e:
             print(f"Error al eliminar empleado: {str(e)}")
@@ -53,8 +58,10 @@ class EmpleadosRepository:
             cursor.close()
     
     def consultar_todos_empleados(self):
-        try:
-            cursor = self.conexion.obtener_cursor()
+        try:           
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
             cursor.execute("CALL proc_consultar_empleados()")
             resultados = cursor.fetchall()
             return resultados
@@ -66,8 +73,10 @@ class EmpleadosRepository:
     
     def consultar_empleado_por_id(self, id):
         try:
-            cursor = self.conexion.obtener_cursor()
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
             cursor.execute("CALL proc_consultar_empleado_por_id(?)", (id,))
+            
             resultado = cursor.fetchone()
             return resultado
         except Exception as e:

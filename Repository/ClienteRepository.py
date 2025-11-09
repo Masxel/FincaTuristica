@@ -128,7 +128,6 @@ class ClienteRepository:
             return None
     
     def id_existe(self, id_cliente):
-        """Verificar si un ID de cliente ya existe"""
         try:
             resultado = self.consultar_por_id(id_cliente)
             return resultado is not None

@@ -694,6 +694,7 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_empleado` (
+    IN p_id INT,
     IN p_nombre VARCHAR(45),
     IN p_apellido VARCHAR(45),
     IN p_telefono VARCHAR(15),
@@ -708,10 +709,10 @@ BEGIN
     END;
     
     START TRANSACTION;
-    
-    INSERT INTO `db_fincaturistica`.`empleados` (`nombre`, `apellido`, `telefono`, `email`, `cargo`)
-    VALUES (p_nombre, p_apellido, p_telefono, p_email, p_cargo);
-    
+
+    INSERT INTO `db_fincaturistica`.`empleados` (`id`, `nombre`, `apellido`, `telefono`, `email`, `cargo`)
+    VALUES (p_id, p_nombre, p_apellido, p_telefono, p_email, p_cargo);
+
     COMMIT;
 END $$
 -- ====================================================================================== --
