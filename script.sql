@@ -1296,3 +1296,75 @@ BEGIN
     SET p_respuesta = ROW_COUNT();
 END $$
 -- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA ESTADO RESERVA ===================== --
+
+-- ==================== INSERTAR ESTADO RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_estadoreserva` (
+    IN _descripcion VARCHAR(45),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    INSERT INTO `db_fincaturistica`.`estadoreserva` (`descripcion`)
+    VALUES (_descripcion);
+    SET _respuesta = LAST_INSERT_ID();
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS ESTADOS RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_todos_estadosreserva` ()
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`estadoreserva`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR ESTADO RESERVA POR ID ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_estadoreserva_por_id` (
+    IN _id INT
+)
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`estadoreserva`
+    WHERE `id` = _id;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR ESTADO RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_estadoreserva` (
+    IN _id INT,
+    IN _descripcion VARCHAR(45),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`estadoreserva`
+    SET `descripcion` = _descripcion
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR ESTADO RESERVA ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_estadoreserva` (
+    IN _id INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`estadoreserva`
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
