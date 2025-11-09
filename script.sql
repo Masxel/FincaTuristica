@@ -52,6 +52,8 @@ CREATE TABLE `db_fincaturistica`.`estadohabitacion` (
     PRIMARY KEY(`id`)
 );
 
+
+
 -- Tabla para registrar los empleados de la finca turistica.
 CREATE TABLE `db_fincaturistica`.`empleados` (
     `id` INT AUTO_INCREMENT NOT NULL,
@@ -1236,5 +1238,61 @@ BEGIN
     WHERE `id` = p_id;
     
     COMMIT;
+END $$
+-- ====================================================================================== --
+
+-- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA MÉTODO DE ESTADO HABITACION ===================== --
+
+-- ==================== INSERTAR ESTADO HABITACION ===================== --
+DELIMITER $$
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_estado_habitacion` (
+    IN p_descripcion VARCHAR(45)
+)
+BEGIN 
+    INSERT INTO `db_fincaturistica`.`estadohabitacion` (`descripcion`)
+    VALUES (p_descripcion);
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS ESTADOS DE HABITACION ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_estados_habitacion` ()
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`estadohabitacion`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR ESTADO HABITACION ===================== --
+DELIMITER $$
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_estado_habitacion` (
+    IN p_id INT,
+    IN p_descripcion VARCHAR(45),
+    INOUT _respuesta INT
+)
+
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`estadohabitacion`
+    SET `descripcion` = p_descripcion
+    WHERE `id` = p_id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR ESTADO HABITACION ===================== --
+DELIMITER $$
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_estado_habitacion` (
+    IN p_id INT,
+    OUT p_respuesta INT
+)
+BEGIN
+    SET p_respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`estadohabitacion`
+    WHERE `id` = p_id;
+    SET p_respuesta = ROW_COUNT();
 END $$
 -- ====================================================================================== --
