@@ -1368,3 +1368,75 @@ BEGIN
     SET _respuesta = ROW_COUNT();
 END $$
 -- ====================================================================================== --
+
+-- ==================== PROCEDIMIENTOS ALMACENADOS PARA EVENTOS ===================== --
+
+-- ==================== INSERTAR EVENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_insertar_eventos` (
+    IN _descripcion VARCHAR(200),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    INSERT INTO `db_fincaturistica`.`eventos` (`descripcion`)
+    VALUES (_descripcion);
+    SET _respuesta = LAST_INSERT_ID();
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR TODOS LOS EVENTOS ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_todos_eventos` ()
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`eventos`;
+END $$
+-- ====================================================================================== --
+
+-- ==================== CONSULTAR EVENTO POR ID ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_consultar_eventos_por_id` (
+    IN _id INT
+)
+BEGIN
+    SELECT `id`, `descripcion`
+    FROM `db_fincaturistica`.`eventos`
+    WHERE `id` = _id;
+END $$
+-- ====================================================================================== --
+
+-- ==================== ACTUALIZAR EVENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_actualizar_eventos` (
+    IN _id INT,
+    IN _descripcion VARCHAR(200),
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    UPDATE `db_fincaturistica`.`eventos`
+    SET `descripcion` = _descripcion
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
+
+-- ==================== ELIMINAR EVENTO ===================== --
+DELIMITER $$
+
+CREATE PROCEDURE `db_fincaturistica`.`proc_eliminar_eventos` (
+    IN _id INT,
+    INOUT _respuesta INT
+)
+BEGIN
+    SET _respuesta = 0;
+    DELETE FROM `db_fincaturistica`.`eventos`
+    WHERE `id` = _id;
+    SET _respuesta = ROW_COUNT();
+END $$
+-- ====================================================================================== --
