@@ -1,75 +1,100 @@
 from Repository.ConexionRepository import ConexionRepository
+from Models.Eventos import Eventos
 
 class EventosRepository:
     
     def __init__(self):
         self.conexion = ConexionRepository()
     
-    def insertar(self, evento):
+    def insertar(self, evento: Eventos):
         try:
-            cursor = self.conexion.obtener_cursor()
-            cursor.execute("CALL proc_insertar_evento(?)", (evento.get_descripcion(),))
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
+            cursor.execute("CALL proc_insertar_evento(?)", (evento.GetDescripcion(),))
             cursor.commit()
+            
+            cursor.close()
+            conn.close()           
             return True
         except Exception as e:
             print(f"Error al insertar evento: {str(e)}")
             return False
-        finally:
-            cursor.close()
+
     
-    def actualizar(self, evento):
+    def actualizar(self, evento: Eventos):
         try:
-            cursor = self.conexion.obtener_cursor()
-            cursor.execute("CALL proc_actualizar_evento(?, ?)", 
-                         (evento.get_id(), evento.get_descripcion()))
-            cursor.commit()
-            return True
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
+            cursor.execute("CALL proc_actualizar_eventos(?, ?, @respuesta)", 
+                         (evento.GetId(), evento.GetDescripcion()))
+            
+            cursor.execute("SELECT @respuesta")
+            
+            resultado = cursor.fetchone()
+            respuesta = resultado[0] if resultado else 0
+            
+            conn.commit()
+
+            cursor.close()
+            conn.close()
+            return respuesta
         except Exception as e:
             print(f"Error al actualizar evento: {str(e)}")
-            return False
-        finally:
-            cursor.close()
+            return 0
     
     def eliminar(self, id):
         try:
-            cursor = self.conexion.obtener_cursor()
-            cursor.execute("CALL proc_eliminar_evento(?)", (id,))
-            cursor.commit()
-            return True
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
+            cursor.execute("CALL proc_eliminar_eventos(?, @respuesta)", (id,))
+            cursor.execute("SELECT @respuesta")
+            
+            resultado = cursor.fetchone()
+            print(f"Resultado de la eliminación: {resultado}")
+            respuesta = resultado[0] if resultado else 0
+            
+            conn.commit()  
+            cursor.close()          
+            conn.close()
+            return respuesta
         except Exception as e:
             print(f"Error al eliminar evento: {str(e)}")
-            return False
-        finally:
-            cursor.close()
+            return 0
     
     def consultar_todos_eventos(self):
-        """Consulta todos los eventos disponibles"""
         try:
-            cursor = self.conexion.obtener_cursor()
-            cursor.execute("CALL proc_consultar_eventos()")
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            
+            cursor.execute("CALL proc_consultar_todos_eventos()")            
             resultados = cursor.fetchall()
+            
+            cursor.close()
+            conn.close()
             return resultados
         except Exception as e:
             print(f"Error al consultar todos los eventos: {str(e)}")
             return []
-        finally:
-            cursor.close()
-    
+
     def consultar_evento_por_id(self, id):
-        """Consulta un evento específico por ID"""
         try:
-            cursor = self.conexion.obtener_cursor()
-            cursor.execute("CALL proc_consultar_evento_por_id(?)", (id,))
+            conn = self.conexion.conectar_base_datos()
+            cursor = conn.cursor()
+            cursor.execute("CALL proc_consultar_eventos_por_id(?)", (id,))
+            
             resultado = cursor.fetchone()
-            return resultado
+            
+            cursor.close()
+            conn.close()
+            return resultado    
         except Exception as e:
             print(f"Error al consultar evento por ID: {str(e)}")
             return None
-        finally:
-            cursor.close()
-    
+        
     def consultar(self, id=None):
-        """Método genérico que llama a los métodos específicos según el parámetro"""
         if id is None:
             return self.consultar_todos_eventos()
         else:
